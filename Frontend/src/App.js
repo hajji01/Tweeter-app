@@ -1,50 +1,31 @@
-
-import React from 'react';
-import 'antd/dist/antd.css';
-import './index.css';
-import './styles/globals.css';
-import { Provider } from 'react-redux';
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { persistStore, persistReducer } from 'redux-persist';
-import { PersistGate } from 'redux-persist/integration/react';
-import storage from 'redux-persist/lib/storage';
-import user from './reducers/user';
-import tweets from './reducers/tweets';
-import Home from './components/Home';
-import Login from './components/Login';
-import SignUp from './components/SignUp';
-
-const reducers = combineReducers({ user, tweets });
-const persistConfig = {
-  key: 'hackatweet',
-  storage,
-  blacklist: ['tweets'],
-};
-
-const store = configureStore({
-  reducer: persistReducer(persistConfig, reducers),
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }),
-});
-
-const persistor = persistStore(store);
+import "./App.css";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Sidebar from "./components/Sidebar";
+import Header from "./components/Header";
+import Feed from "./components/Feed";
+import Home from "./routes/home";
+import Profile from "./routes/profile";
+import Search from "./routes/search";
+import SignUp from "./routes/signUp";
+import Topic from "./routes/topic";
 
 function App() {
-  console.log("App.js is rendering...");
-
   return (
-    <Provider store={store}>
-      <PersistGate persistor={persistor}>
-        <Router>
+    <Router>
+      <div className="App">
+        <Sidebar />
+        <div className="HeaderAndFeed">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/search" element={<Search />} />
             <Route path="/signup" element={<SignUp />} />
+            <Route path="/topic" element={<Topic />} />
           </Routes>
-        </Router>
-      </PersistGate>
-    </Provider>
+        </div>
+      </div>
+    </Router>
   );
 }
-
+ 
 export default App;
