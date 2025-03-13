@@ -61,6 +61,12 @@ $ cd ../frontend
 $ npm install
 ```
 
+#### Flask 
+```sh
+$ cd ..
+$ flask run --host=0.0.0.0 --port=5000
+```
+
 ### 3️⃣ Configuration
 
 Créer un fichier `.env` dans le dossier **backend/** et y ajouter :
@@ -68,6 +74,7 @@ Créer un fichier `.env` dans le dossier **backend/** et y ajouter :
 ```env
 MONGO_URI=mongodb+srv://zysos:IPSSI2025@tweeter.8eyng.mongodb.net/?retryWrites=true&w=majority&appName=Tweeter
 JWT_SECRET=mySuperSecretKey123!
+FLASK_API_URL=http://127.0.0.1:5000
 ```
 
 ### 4️⃣ Lancer l'application
