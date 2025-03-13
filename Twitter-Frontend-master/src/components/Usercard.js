@@ -1,10 +1,10 @@
 import { useContext } from "react";
 import React from "react";
 import { Link } from "react-router-dom";
-import { urlContext } from "../index";
+import { nodeUrlContext } from "../index";
 
 function Usercard(props) {
-  const url = useContext(urlContext);
+  const url = useContext(nodeUrlContext);
 
   return (
     <Link to={`/profile/${props.username}`}>

@@ -3,7 +3,7 @@ import { Tag } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import Tweet from "./Tweet";
 import { Link } from "react-router-dom";
-import { urlContext } from "../index";
+import { nodeUrlContext } from "../index";
 const axios = require("axios");
 
 function TopicArea() {
@@ -14,7 +14,7 @@ function TopicArea() {
   const [tweetCount, setTweetCount] = useState("20");
   const [tag, setTag] = useState("Sports");
   const [index1, setIndex1] = useState(0);
-  const url = useContext(urlContext);
+  const url = useContext(nodeUrlContext);
 
   const navigate = useNavigate();
 

@@ -15,7 +15,7 @@ import moment from "moment";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import { Box } from "@chakra-ui/react";
-import { urlContext } from "../index";
+import { nodeUrlContext } from "../index";
 
 import jwtDecode from "jwt-decode";
 
@@ -27,7 +27,7 @@ function Sidebar() {
   const [isImageSelected, setIsImageSelected] = useState(false);
   const [tag, setTag] = useState("");
   const [index1, setIndex1] = useState("");
-  const url = useContext(urlContext);
+  const url = useContext(nodeUrlContext);
 
   const tags = [
     "Sports",

@@ -12,7 +12,7 @@ import "reactjs-popup/dist/index.css";
 import moment from "moment";
 import { useToast } from "@chakra-ui/toast";
 import { Tag } from "@chakra-ui/react";
-import { urlContext } from "../index";
+import { nodeUrlContext } from "../index";
 
 function Tweet(props) {
   const [likeCount, setLikeCount] = useState(props.body.likes.length);
@@ -30,7 +30,7 @@ function Tweet(props) {
   const tweetId = props.body.postedTweetTime;
   const isUserActive = props.body.postedBy.username === props.user;
   const toast = useToast();
-  const url = useContext(urlContext);
+  const url = useContext(nodeUrlContext);
 
   const errorToast = () => {
     toast({
