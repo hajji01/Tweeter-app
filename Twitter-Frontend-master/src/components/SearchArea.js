@@ -1,12 +1,12 @@
 import React, { useState, useContext } from "react";
 import Usercard from "./Usercard";
-import { urlContext } from "../index";
+import { nodeUrlContext } from "../index";
 const axios = require("axios");
 
 function SearchArea() {
   const [text, setText] = useState("");
   const [users, setUsers] = useState([]);
-  const url = useContext(urlContext);
+  const url = useContext(nodeUrlContext);
 
   const handleChange = (e) => {
     setText(e.target.value);

@@ -4,12 +4,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { BsTwitter } from "react-icons/bs";
 import { useToast } from "@chakra-ui/toast";
 import jwtDecode from "jwt-decode";
-import { urlContext } from "../index";
+import { nodeUrlContext } from "../index";
 
 function HomeBody() {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
-  const url = useContext(urlContext);
+  const url = useContext(nodeUrlContext);
 
   const toast = useToast();
 

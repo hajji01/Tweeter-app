@@ -5,7 +5,7 @@ import jwtDecode from "jwt-decode";
 import axios from "axios";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
-import { urlContext } from "../index";
+import { nodeUrlContext } from "../index";
 
 function ProfileBody() {
   const [loading, setLoading] = useState(true);
@@ -17,7 +17,7 @@ function ProfileBody() {
   const navigate = useNavigate();
   let { userName } = useParams();
   const isActiveUser = activeUser === userName;
-  const url = useContext(urlContext);
+  const url = useContext(nodeUrlContext);
 
   const fetchProfileData = useCallback(async () => {
     try {

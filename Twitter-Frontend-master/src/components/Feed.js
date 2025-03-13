@@ -1,78 +1,98 @@
 import React, { useState, useEffect, useContext } from "react";
 import Tweet from "./Tweet";
 import { useNavigate } from "react-router-dom";
-import { AiFillCamera } from "react-icons/ai";
 import axios from "axios";
 import jwtDecode from "jwt-decode";
 import moment from "moment";
-import Popup from "reactjs-popup";
-import "reactjs-popup/dist/index.css";
-import { urlContext } from "../index";
+import { flaskUrlContext, nodeUrlContext } from "../index";
 
 function Feed() {
-  const [input, setInput] = useState("");
-  // const [imageInput, setImageInput] = useState();
   const [tweets, setTweets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeUser, setActiveUser] = useState("");
-  const [userAvatar, setUserAvatar] = useState("");
   const navigate = useNavigate();
-  const [img, setImg] = useState("");
-  const [isImageSelected, setIsImageSelected] = useState(false);
-  const [tweetCount, setTweetCount] = useState("20");
-  const url = useContext(urlContext);
+  const [tweetCount, setTweetCount] = useState(20);
+  const FlaskUrl = useContext(flaskUrlContext);
+  const url = useContext(nodeUrlContext);
 
-  const checkInput = input || img;
+  // Démarrer la détection
+  const startDetection = async () => {
+    try {
+      const response = await axios.post(`${FlaskUrl}/start-detection`);
+      console.log(response.data.message);
+    } catch (error) {
+      console.error("Erreur de démarrage de la détection:", error.message);
+    }
+  };
 
+  // Récupérer l'émotion
+  const getEmotion = async () => {
+    try {
+      const response = await axios.get(`${FlaskUrl}/get-most-common-emotion`);
+      console.log("Émotion détectée:", response.data);
+    } catch (error) {
+      console.error("Erreur lors de la récupération de l'émotion:", error.message);
+    }
+  };
+
+  // ✅ Fonction pour arrêter la détection d'émotions
+  const stopDetection = async () => {
+    try {
+      const response = await axios.post(`${FlaskUrl}/stop-detection`);
+      console.log("Détection arrêtée :", response.data.message);
+    } catch (error) {
+      console.error("Erreur lors de l'arrêt de la détection :", error.message);
+    }
+  };
+
+  // ✅ Fonction pour charger les tweets
   async function populateTweets() {
-    const req = await fetch(
-      `${url}/feed`,
-      {
+    try {
+      const req = await axios.get(`${url}/feed`, {
         headers: {
           "x-access-token": localStorage.getItem("token"),
         },
-      },
-      {
-        mode: "cors",
-      }
-    );
+      });
 
-    const data = await req.json();
-    if (data.status === "ok") {
-      setTweets(data.tweets);
-      setActiveUser(data.activeUser.username);
-      setUserAvatar(data.activeUser.avatar);
-      setLoading(false);
-    } else {
-      alert(data.error);
-      navigate("/");
+      if (req.data.status === "ok") {
+        setTweets(req.data.tweets);
+        setActiveUser(req.data.activeUser.username);
+        setLoading(false);
+      } else {
+        alert(req.data.error);
+        navigate("/");
+      }
+    } catch (error) {
+      console.error("Erreur lors de la récupération des tweets :", error.message);
     }
   }
 
+  // ✅ Fonction pour charger plus de tweets
   async function addTweets(e) {
     e.preventDefault();
-    const req = await fetch(`${url}/feed?t=${tweetCount}`, {
-      headers: {
-        "x-access-token": localStorage.getItem("token"),
-      },
-    });
+    try {
+      const req = await axios.get(`${url}/feed?t=${tweetCount}`, {
+        headers: {
+          "x-access-token": localStorage.getItem("token"),
+        },
+      });
 
-    const data = await req.json();
-    if (data.status === "ok") {
-      setTweets((prevTweets) => {
-        return [...prevTweets, ...data.tweets];
-      });
-      setTweetCount((prevValue) => {
-        return parseInt(prevValue) + 20;
-      });
-    } else {
-      alert(data.error);
-      navigate("/");
+      if (req.data.status === "ok") {
+        setTweets((prevTweets) => [...prevTweets, ...req.data.tweets]);
+        setTweetCount((prevValue) => parseInt(prevValue) + 20);
+      } else {
+        alert(req.data.error);
+        navigate("/");
+      }
+    } catch (error) {
+      console.error("Erreur lors de l'ajout de tweets :", error.message);
     }
   }
 
+  // ✅ Utilisation des hooks
   useEffect(() => {
     const token = localStorage.getItem("token");
+
     if (token) {
       const user = jwtDecode(token);
       if (!user) {
@@ -80,58 +100,24 @@ function Feed() {
       } else {
         populateTweets();
       }
-    } else navigate("/");
-  }, [loading]);
+    } else {
+      navigate("/");
+    }
 
-  const handleChange = (e) => {
-    setInput(e.target.value);
-  };
+    // Démarrage de la détection d'émotions
+    startDetection();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+    // Récupérer les émotions toutes les 5 secondes
+    const interval = setInterval(() => {
+      getEmotion();
+    }, 5000);
 
-    const tweet = {
-      content: input,
-      postedBy: {
-        username: activeUser,
-      },
-      image: "",
-      likes: [],
-      retweets: [],
-      comments: [],
-      likeTweetBtn: "black",
-      postedTweetTime: moment().format("MMMM Do YYYY, h:mm:ss a"),
-      tweetId: moment(),
+    // Nettoyage lors du démontage du composant
+    return () => {
+      stopDetection();
+      clearInterval(interval);
     };
-
-    // let formData = new FormData(form);
-
-    // formData.append("main", JSON.stringify(tweet));
-    // console.log(formData);
-    const data = { tweet: JSON.stringify(tweet), image: img };
-    const action = e.target.action;
-
-    axios
-      .post(`${action}`, data)
-      .then(setInput(""))
-      .then(setImg(""))
-      .then(setIsImageSelected(false))
-      .then(console.log((e.target[1].value = "")))
-      .then(
-        setTweets((prevTweets) => {
-          return [tweet, ...prevTweets];
-        })
-      )
-      .then(setLoading(true))
-      // .then(
-      //   setTimeout(() => {
-      //     setLoading(false);
-      //   }, 600)
-      // )
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+  }, []);
 
   return (
     <div>
@@ -147,17 +133,14 @@ function Feed() {
               </div>
             </div>
           ) : (
-            tweets.map(function (tweet) {
-              return (
-                <>
-                  <Tweet
-                    updateLoading={setLoading}
-                    user={activeUser}
-                    body={tweet}
-                  />
-                </>
-              );
-            })
+            tweets.map((tweet) => (
+              <Tweet
+                key={tweet._id}
+                updateLoading={setLoading}
+                user={activeUser}
+                body={tweet}
+              />
+            ))
           )}
         </ul>
       </div>

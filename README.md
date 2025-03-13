@@ -61,6 +61,12 @@ $ cd ../frontend
 $ npm install
 ```
 
+#### Flask 
+```sh
+$ cd ..
+$ flask run --host=0.0.0.0 --port=5000
+```
+
 ### 3️⃣ Configuration
 
 Créer un fichier `.env` dans le dossier **backend/** et y ajouter :

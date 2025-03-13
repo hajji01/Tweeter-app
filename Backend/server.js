@@ -14,12 +14,21 @@ require("dotenv").config();
 const port = process.env.PORT || 5001;
 const http = require('http');
 const socketIo = require('socket.io');
-app.use(cors());
+const axios = require("axios");
+
+app.use(cors({
+  origin: "http://localhost:3000",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
+}));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("build"));
 app.use("/images", express.static("images"));
 app.use("./tweetImages", express.static("tweetImages"));
+
+const flaskApiUrl = process.env.FLASK_API_URL || "http://127.0.0.1:5000";
+
 mongoose.set('strictQuery', true);
 // Connexion à MongoDB
 const connectDB = async () => {
@@ -674,6 +683,41 @@ if (process.env.NODE_ENV === "production") {
     res.sendFile(path.join(__dirname, "../frontend/build", "index.html"));
   });
 };
+
+
+// Démarrer la détection d'émotions via Flask
+app.post("/start-detection", async (req, res) => {
+  try {
+    const response = await axios.post(`${flaskApiUrl}/debut_detection`);
+    res.json(response.data);
+  } catch (error) {
+    console.error("Erreur lors du démarrage de la détection:", error);
+    res.status(500).json({ status: "error", error: error.message });
+  }
+});
+
+// Arrêter la détection d'émotions via Flask
+app.post("/stop-detection", async (req, res) => {
+  try {
+    const response = await axios.post(`${flaskApiUrl}/stop_detection`);
+    res.json(response.data);
+  } catch (error) {
+    console.error("Erreur lors de l'arrêt de la détection:", error);
+    res.status(500).json({ status: "error", error: error.message });
+  }
+});
+
+// Obtenir l'émotion la plus courante via Flask
+app.get("/get-most-common-emotion", async (req, res) => {
+  try {
+    const response = await axios.get(`${flaskApiUrl}/emotion_detecte`);
+    res.json(response.data);
+  } catch (error) {
+    console.error("Erreur lors de la récupération de l'émotion:", error);
+    res.status(500).json({ status: "error", error: error.message });
+  }
+});
+
 
 app.listen(port, () => {
   console.log("server running on port " + port);

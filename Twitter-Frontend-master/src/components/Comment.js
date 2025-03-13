@@ -6,7 +6,7 @@ import { RiDeleteBin6Fill } from "react-icons/ri";
 import { AiFillEdit } from "react-icons/ai";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
-import { urlContext } from "../index";
+import { nodeUrlContext } from "../index";
 
 function Comment(props) {
   const [likeCount, setLikeCount] = useState(props.body.likes.length);
@@ -15,7 +15,7 @@ function Comment(props) {
   const [isEdited, setIsEdited] = useState(props.body.isEdited);
   const commentId = props.body._id; // Utilisation de _id pour MongoDB
   const isUserActive = props.body.postedBy.username === props.user;
-  const url = useContext(urlContext);
+  const url = useContext(nodeUrlContext);
 
   /** Gérer le like du commentaire */
   const handleLike = async (e) => {
