@@ -226,8 +226,8 @@ function Sidebar() {
                 <div className="tagArea">
                   {tags.map((tag, index) => {
                     return index1 === index ? (
-                      // <Link to={`/topic/${tag}`}>
                       <Tag
+                        key={tag}
                         onClick={(e) => {
                           handleSubmitTag(e);
                           setIndex1(index);
@@ -239,9 +239,8 @@ function Sidebar() {
                         {tag}
                       </Tag>
                     ) : (
-                      // </Link>
-                      // <Link to={`/topic/${tag}`}>
                       <Tag
+                        key={tag}
                         onClick={(e) => {
                           handleSubmitTag(e);
                           setIndex1(index);
@@ -250,7 +249,6 @@ function Sidebar() {
                       >
                         {tag}
                       </Tag>
-                      // </Link>
                     );
                   })}
                 </div>

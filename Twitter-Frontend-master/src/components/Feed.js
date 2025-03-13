@@ -140,9 +140,9 @@ function Feed() {
           {loading ? (
             <div
               style={{ marginTop: "50px", marginLeft: "250px" }}
-              class="loadingio-spinner-rolling-uzhdebhewyj"
+              className="loadingio-spinner-rolling-uzhdebhewyj"
             >
-              <div class="ldio-gkgg43sozzi">
+              <div className="ldio-gkgg43sozzi">
                 <div></div>
               </div>
             </div>

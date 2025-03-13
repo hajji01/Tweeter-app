@@ -50,7 +50,7 @@ function Tweet(props) {
 
     const data = await req.json();
     if (data.status === "ok") {
-      if (data.tweet.comments !== []) {
+      if (data.tweet.comments !== "") {
         setComments(data.tweet[0].comments);
         setTimeout(() => {
           setLoading(false);
@@ -414,9 +414,9 @@ function Tweet(props) {
           {loading ? (
             <div
               style={{ marginTop: "50px", marginLeft: "250px" }}
-              class="loadingio-spinner-rolling-uzhdebhewyj"
+              className="loadingio-spinner-rolling-uzhdebhewyj"
             >
-              <div class="ldio-gkgg43sozzi">
+              <div className="ldio-gkgg43sozzi">
                 <div></div>
               </div>
             </div>
@@ -424,6 +424,7 @@ function Tweet(props) {
             comments.map(function (comment) {
               return (
                 <Comment
+                  key={comment.commentId}
                   updateLoading={setLoading}
                   user={props.user}
                   tweetBy={props.body.postedBy.username}

@@ -105,12 +105,12 @@ function Comment(props) {
             nested
           >
             <ul className="delete-popup" style={{ listStyle: "none" }}>
-              <li>
+              <li key="delete">
                 <button className="delete-btn" onClick={deleteComment}>
                   <RiDeleteBin6Fill /> Delete
                 </button>
               </li>
-              <li>
+              <li key="edit">
                 <Popup
                   trigger={<button className="delete-btn"><AiFillEdit /> Edit</button>}
                   modal
