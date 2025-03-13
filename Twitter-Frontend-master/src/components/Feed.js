@@ -35,7 +35,7 @@ function Feed() {
     }
   };
 
-  // ✅ Fonction pour arrêter la détection d'émotions
+  // Fonction pour arrêter la détection d'émotions
   const stopDetection = async () => {
     try {
       const response = await axios.post(`${FlaskUrl}/stop-detection`);
@@ -45,7 +45,7 @@ function Feed() {
     }
   };
 
-  // ✅ Fonction pour charger les tweets
+  // Fonction pour charger les tweets
   async function populateTweets() {
     try {
       const req = await axios.get(`${url}/feed`, {
@@ -67,7 +67,7 @@ function Feed() {
     }
   }
 
-  // ✅ Fonction pour charger plus de tweets
+  // Fonction pour charger plus de tweets
   async function addTweets(e) {
     e.preventDefault();
     try {
@@ -89,7 +89,7 @@ function Feed() {
     }
   }
 
-  // ✅ Utilisation des hooks
+  // Utilisation des hooks
   useEffect(() => {
     const token = localStorage.getItem("token");
 
