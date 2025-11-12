@@ -17,9 +17,12 @@ const socketIo = require('socket.io');
 const axios = require("axios");
 
 app.use(cors({
-  origin: "http://localhost:3000",
+  origin: [
+    "http://localhost:3000", // pour le dev local
+    "https://twitter-frontend.onrender.com", // <-- ton URL en ligne exacte
+  ],
   methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true
+  credentials: true,
 }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
